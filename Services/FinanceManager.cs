@@ -11,7 +11,6 @@ public class FinanceManager
 
     public FinanceManager()
     {
-        // тестовые пользователи
         users.Add(new User(1, "Mama", Role.Parent));
         users.Add(new User(2, "Papa", Role.Parent));
         users.Add(new User(3, "Kind", Role.Child));
@@ -19,9 +18,11 @@ public class FinanceManager
 
     public User? LoginUser(string name)
     {
+        string input = name.Trim();
+
         foreach (var user in users)
         {
-            if (user.Name.ToLower() == name.ToLower())
+            if (string.Equals(user.Name, input, StringComparison.OrdinalIgnoreCase))
             {
                 return user;
             }
@@ -29,8 +30,7 @@ public class FinanceManager
 
         return null;
     }
-
-    public void AddTransaction(Transaction transaction)
+        public void AddTransaction(Transaction transaction)
     {
         transactions.Add(transaction);
     }
