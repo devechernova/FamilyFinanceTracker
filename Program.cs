@@ -1,10 +1,14 @@
-﻿namespace FamilyFinanceTracker
+﻿namespace FamilyFinanceTracker;
+
+using FamilyFinanceTracker.Models;
+
+class Program
 {
-    internal class Program
+    static void Main()
     {
-        static void Main(string[] args)
-        {
-            Console.WriteLine("Hello, World!");
-        }
+        Transaction t = new Transaction(1, 50, TransactionType.Expense, 1, 1);
+        Console.WriteLine($"Amount: {t.Amount}, Type: {t.Type}");
     }
 }
+
+
