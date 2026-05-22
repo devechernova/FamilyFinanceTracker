@@ -1,6 +1,7 @@
-﻿using System;
-
+﻿using System.Text.Json.Serialization;
 using FamilyFinanceTracker.Models;
+using System.Text.Json;
+using System.IO;
 
 namespace FamilyFinanceTracker.Services;
 
@@ -11,10 +12,22 @@ public class FinanceManager
 
     public FinanceManager()
     {
-        users.Add(new User(1, "Mama", Role.Parent));
-        users.Add(new User(2, "Papa", Role.Parent));
-        users.Add(new User(3, "Kind", Role.Child));
+        LoadUsers();
     }
+
+    private void LoadUsers()
+    {
+        string json = File.ReadAllText("Data/users.json");
+
+        var options = new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
+        };
+        options.Converters.Add(new JsonStringEnumConverter());
+
+        users = JsonSerializer.Deserialize<List<User>>(json, options)!;
+    }
+
 
     public User? LoginUser(string name)
     {

@@ -1,0 +1,17 @@
+[
+  {
+    "Id": 1,
+    "Name": "Mama",
+    "Role": "Parent"
+  },
+  {
+    "Id": 2,
+    "Name": "Papa",
+    "Role": "Parent"
+  },
+  {
+    "Id": 3,
+    "Name": "Kind",
+    "Role": "Child"
+  }
+]
