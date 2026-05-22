@@ -9,26 +9,45 @@ public class FinanceManager
 {
     private List<User> users = new List<User>();
     private List<Transaction> transactions = new List<Transaction>();
+    private List<Transaction> transactions = new List<Transaction>();
 
     public FinanceManager()
     {
         LoadUsers();
+        LoadTransactions();
     }
 
-    private void LoadUsers()
+private void LoadUsers()
+{
+    string json = File.ReadAllText("Data/users.json");
+
+    var options = new JsonSerializerOptions
     {
-        string json = File.ReadAllText("Data/users.json");
+        PropertyNameCaseInsensitive = true
+    };
+    options.Converters.Add(new JsonStringEnumConverter());
 
-        var options = new JsonSerializerOptions
-        {
-            PropertyNameCaseInsensitive = true
-        };
-        options.Converters.Add(new JsonStringEnumConverter());
+    users = JsonSerializer.Deserialize<List<User>>(json, options)!;
+}
 
-        users = JsonSerializer.Deserialize<List<User>>(json, options)!;
+private void LoadTransactions()
+{
+    if (!File.Exists("Data/transactions.json"))
+    {
+        transactions = new List<Transaction>();
+        return;
     }
 
+    string json = File.ReadAllText("Data/transactions.json");
 
+    var options = new JsonSerializerOptions
+    {
+        PropertyNameCaseInsensitive = true
+    };
+
+    transactions = JsonSerializer.Deserialize<List<Transaction>>(json, options)
+                   ?? new List<Transaction>();
+}
     public User? LoginUser(string name)
     {
         string input = name.Trim();
