@@ -1,19 +1,20 @@
-﻿using System.Text.Json.Serialization;
-using FamilyFinanceTracker.Models;
-using System.Text.Json;
+﻿using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.IO;
+using FamilyFinanceTracker.Models;
 
 namespace FamilyFinanceTracker.Services;
 
 public class FinanceManager
 {
     private List<User> users = new List<User>();
-    private List<Transaction> transactions = new List<Transaction>();
+    private List<Category> categories = new List<Category>();
     private List<Transaction> transactions = new List<Transaction>();
 
     public FinanceManager()
     {
         LoadUsers();
+        LoadCategories();
         LoadTransactions();
     }
 
@@ -29,6 +30,18 @@ private void LoadUsers()
 
     users = JsonSerializer.Deserialize<List<User>>(json, options)!;
 }
+
+private void LoadCategories()
+    {
+        string json = File.ReadAllText("Data/categories.json");
+
+        var options = new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
+        };
+
+        categories = JsonSerializer.Deserialize<List<Category>>(json, options)!;
+    }
 
 private void LoadTransactions()
 {
@@ -48,6 +61,20 @@ private void LoadTransactions()
     transactions = JsonSerializer.Deserialize<List<Transaction>>(json, options)
                    ?? new List<Transaction>();
 }
+
+
+private void SaveTransactions()
+    {
+        var options = new JsonSerializerOptions
+        {
+            WriteIndented = true
+        };
+
+        string json = JsonSerializer.Serialize(transactions, options);
+
+        File.WriteAllText("Data/transactions.json", json);
+    }
+
     public User? LoginUser(string name)
     {
         string input = name.Trim();
@@ -62,9 +89,10 @@ private void LoadTransactions()
 
         return null;
     }
-        public void AddTransaction(Transaction transaction)
+    public void AddTransaction(Transaction transaction)
     {
         transactions.Add(transaction);
+        SaveTransactions();
     }
 
     public decimal GetBalance()
@@ -80,6 +108,12 @@ private void LoadTransactions()
         }
 
         return balance;
+    }
+
+
+    public List<Category> GetCategories()
+    {
+        return categories;
     }
 
     public List<Transaction> GetAllTransactions()
