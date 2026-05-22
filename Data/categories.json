@@ -1,0 +1,66 @@
+[
+  {
+    "Id": 1,
+    "Name": "Lebensmittel"
+  },
+  {
+    "Id": 2,
+    "Name": "Restaurant / Lieferung"
+  },
+  {
+    "Id": 3,
+    "Name": "Transport (ÖPNV)"
+  },
+  {
+    "Id": 4,
+    "Name": "Auto / Benzin"
+  },
+  {
+    "Id": 5,
+    "Name": "Miete"
+  },
+  {
+    "Id": 6,
+    "Name": "Nebenkosten"
+  },
+  {
+    "Id": 7,
+    "Name": "Unterhaltung"
+  },
+  {
+    "Id": 8,
+    "Name": "Kleidung"
+  },
+  {
+    "Id": 9,
+    "Name": "Gesundheit"
+  },
+  {
+    "Id": 10,
+    "Name": "Bildung"
+  },
+  {
+    "Id": 11,
+    "Name": "Abonnements"
+  },
+  {
+    "Id": 12,
+    "Name": "Geschenke"
+  },
+  {
+    "Id": 13,
+    "Name": "Reisen"
+  },
+  {
+    "Id": 14,
+    "Name": "Kinder"
+  },
+  {
+    "Id": 15,
+    "Name": "Arbeit / Beruf"
+  },
+  {
+    "Id": 16,
+    "Name": "Sonstiges"
+  }
+]
