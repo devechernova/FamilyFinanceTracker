@@ -1,10 +1,12 @@
 ﻿using FamilyFinanceTracker.Models;
 using FamilyFinanceTracker.Services;
+using System.Text;
 
 class Program
 {
     static void Main()
     {
+        Console.OutputEncoding = Encoding.UTF8;
         FinanceManager manager = new FinanceManager();
 
         Console.Write("Benutzername eingeben: ");
@@ -93,7 +95,10 @@ class Program
 
         foreach (var t in transactions)
         {
-            Console.WriteLine($"{t.Type}: {t.Amount} € | Kategorie-ID: {t.CategoryId} | Datum: {t.Date}");
+            string typeText = t.Type == TransactionType.Income ? "Einnahme" : "Ausgabe";
+
+            Console.WriteLine($"{typeText}: {t.Amount} € | Kategorie: {manager.GetCategoryName(t.CategoryId)}");
+
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Linq;
 using System.IO;
 using FamilyFinanceTracker.Models;
 
@@ -110,6 +111,12 @@ private void SaveTransactions()
         return balance;
     }
 
+    public string GetCategoryName(int categoryId)
+    {
+        var category = categories.FirstOrDefault(c => c.Id == categoryId);
+
+        return category != null ? category.Name : "Unbekannt";
+    }
 
     public List<Category> GetCategories()
     {
