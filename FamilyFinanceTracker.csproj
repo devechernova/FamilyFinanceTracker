@@ -13,5 +13,9 @@
 		</None>
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Documentation\Projekt\" />
+	</ItemGroup>
+
 
 </Project>
