@@ -68,6 +68,11 @@ class Program
 
     static void AddTransaction(FinanceManager manager, User user, TransactionType type)
     {
+        if (user.Role == Role.Child && type == TransactionType.Income)
+        {
+            Console.WriteLine("Kinder dürfen keine Einnahmen hinzufügen!");
+            return;
+        }
         Console.Write("Betrag eingeben: ");
 
         decimal amount;
