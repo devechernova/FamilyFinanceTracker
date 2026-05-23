@@ -69,7 +69,13 @@ class Program
     static void AddTransaction(FinanceManager manager, User user, TransactionType type)
     {
         Console.Write("Betrag eingeben: ");
-        decimal amount = Convert.ToDecimal(Console.ReadLine());
+
+        decimal amount;
+        while (!decimal.TryParse(Console.ReadLine(), out amount))
+        {
+            Console.Write("Ungültiger Betrag, bitte erneut eingeben: ");
+        }
+
 
         Console.WriteLine("Kategorie auswählen:");
 
