@@ -31,7 +31,8 @@ class Program
             Console.WriteLine("2. Ausgabe hinzufügen");
             Console.WriteLine("3. Kontostand anzeigen");
             Console.WriteLine("4. Transaktionen anzeigen");
-            Console.WriteLine("5. Beenden");
+            Console.WriteLine("5. Statistik anzeigen");
+            Console.WriteLine("6. Beenden");
             Console.Write("Option wählen: ");
 
             string choice = Console.ReadLine()!;
@@ -55,6 +56,10 @@ class Program
                     break;
 
                 case "5":
+                    ShowStatistics(manager);
+                    break;
+
+                case "6":
                     running = false;
                     Console.WriteLine("Programm wird beendet...");
                     break;
@@ -110,6 +115,17 @@ class Program
 
             Console.WriteLine($"{typeText}: {t.Amount} € | Kategorie: {manager.GetCategoryName(t.CategoryId)}");
 
+        }
+    }
+    static void ShowStatistics(FinanceManager manager)
+    {
+        var stats = manager.GetExpensesByCategory();
+
+        Console.WriteLine("\n=== AUSGABEN NACH KATEGORIEN ===");
+
+        foreach (var entry in stats)
+        {
+            Console.WriteLine($"{entry.Key}: {entry.Value} €");
         }
     }
 }

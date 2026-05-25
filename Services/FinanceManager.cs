@@ -133,5 +133,26 @@ private void SaveTransactions()
     {
         return transactions;
     }
+    public Dictionary<string, decimal> GetExpensesByCategory()
+    {
+        var result = new Dictionary<string, decimal>();
+
+        // nur Ausgaben
+        var expenses = transactions.Where(t => t.Type == TransactionType.Expense);
+
+        foreach (var t in expenses)
+        {
+            string categoryName = GetCategoryName(t.CategoryId);
+
+            if (!result.ContainsKey(categoryName))
+            {
+                result[categoryName] = 0;
+            }
+
+            result[categoryName] += t.Amount;
+        }
+
+        return result;
+    }
 }
 

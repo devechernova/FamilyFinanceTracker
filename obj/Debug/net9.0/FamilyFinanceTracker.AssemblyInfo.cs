@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("FamilyFinanceTracker")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+734569ef2123b858d053328c035545b410e667eb")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3d01be92a8ffa4a602eda09639318e5f8cd01946")]
 [assembly: System.Reflection.AssemblyProductAttribute("FamilyFinanceTracker")]
 [assembly: System.Reflection.AssemblyTitleAttribute("FamilyFinanceTracker")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
