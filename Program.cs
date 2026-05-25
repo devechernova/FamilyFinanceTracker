@@ -1,6 +1,7 @@
 ﻿using FamilyFinanceTracker.Models;
 using FamilyFinanceTracker.Services;
 using System.Text;
+using System.Linq;
 
 class Program
 {
@@ -27,46 +28,71 @@ class Program
         while (running)
         {
             Console.WriteLine("\n=== MENÜ ===");
-            Console.WriteLine("1. Einnahme hinzufügen");
-            Console.WriteLine("2. Ausgabe hinzufügen");
-            Console.WriteLine("3. Kontostand anzeigen");
-            Console.WriteLine("4. Transaktionen anzeigen");
-            Console.WriteLine("5. Statistik anzeigen");
-            Console.WriteLine("6. Beenden");
-            Console.Write("Option wählen: ");
+
+            if (user.Role == Role.Parent)
+            {
+                Console.WriteLine("1. Einnahme hinzufügen");
+                Console.WriteLine("2. Ausgabe hinzufügen");
+                Console.WriteLine("3. Kontostand anzeigen");
+                Console.WriteLine("4. Transaktionen anzeigen");
+                Console.WriteLine("5. Statistik anzeigen");
+                Console.WriteLine("6. Beenden");
+            }
+            else
+            {
+                Console.WriteLine("1. Ausgabe hinzufügen");
+                Console.WriteLine("2. Meine Ausgaben anzeigen");
+                Console.WriteLine("3. Beenden");
+            }
+
 
             string choice = Console.ReadLine()!;
 
-            switch (choice)
+            if (user.Role == Role.Parent)
             {
-                case "1":
-                    AddTransaction(manager, user, TransactionType.Income);
-                    break;
+                switch (choice)
+                {
+                    case "1":
+                        AddTransaction(manager, user, TransactionType.Income);
+                        break;
 
-                case "2":
-                    AddTransaction(manager, user, TransactionType.Expense);
-                    break;
+                    case "2":
+                        AddTransaction(manager, user, TransactionType.Expense);
+                        break;
 
-                case "3":
-                    Console.WriteLine($"Aktueller Kontostand: {manager.GetBalance()} €");
-                    break;
+                    case "3":
+                        Console.WriteLine($"Aktueller Kontostand: {manager.GetBalance()} €");
+                        break;
 
-                case "4":
-                    ShowTransactions(manager);
-                    break;
+                    case "4":
+                        ShowTransactions(manager);
+                        break;
 
-                case "5":
-                    ShowStatistics(manager);
-                    break;
+                    case "5":
+                        ShowStatistics(manager);
+                        break;
 
-                case "6":
-                    running = false;
-                    Console.WriteLine("Programm wird beendet...");
-                    break;
+                    case "6":
+                        running = false;
+                        break;
+                }
+            }
+            else
+            {
+                switch (choice)
+                {
+                    case "1":
+                        AddTransaction(manager, user, TransactionType.Expense);
+                        break;
 
-                default:
-                    Console.WriteLine("Ungültige Eingabe, bitte erneut versuchen!");
-                    break;
+                    case "2":
+                        ShowTransactionsForUser(manager, user);
+                        break;
+
+                    case "3":
+                        running = false;
+                        break;
+                }
             }
         }
     }
@@ -131,6 +157,18 @@ class Program
 
             Console.WriteLine($"{typeText}: {t.Amount} € | Kategorie: {manager.GetCategoryName(t.CategoryId)}");
 
+        }
+    }
+    static void ShowTransactionsForUser(FinanceManager manager, User user)
+    {
+        var transactions = manager.GetAllTransactions()
+                                  .Where(t => t.UserId == user.Id);
+
+        Console.WriteLine("\n=== MEINE AUSGABEN ===");
+
+        foreach (var t in transactions)
+        {
+            Console.WriteLine($"Ausgabe: {t.Amount} € | Kategorie: {manager.GetCategoryName(t.CategoryId)}");
         }
     }
     static void ShowStatistics(FinanceManager manager)
