@@ -8,7 +8,7 @@
   </PropertyGroup>
 
 	<ItemGroup>
-		<None Include="Data\**\*.*">
+		<None Update="Data\*.json">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
 	</ItemGroup>

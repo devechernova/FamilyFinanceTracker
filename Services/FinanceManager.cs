@@ -52,9 +52,12 @@ private void LoadTransactions()
         return;
     }
 
-    string json = File.ReadAllText("Data/transactions.json");
+        string path = Path.Combine(AppContext.BaseDirectory, "Data", "transactions.json");
 
-    var options = new JsonSerializerOptions
+        string json = File.ReadAllText(path);
+
+
+        var options = new JsonSerializerOptions
     {
         PropertyNameCaseInsensitive = true
     };
@@ -66,6 +69,7 @@ private void LoadTransactions()
 
 private void SaveTransactions()
     {
+        Console.WriteLine("DEBUG: SaveTransactions called ");
         var options = new JsonSerializerOptions
         {
             WriteIndented = true
@@ -73,7 +77,9 @@ private void SaveTransactions()
 
         string json = JsonSerializer.Serialize(transactions, options);
 
-        File.WriteAllText("Data/transactions.json", json);
+        string path = Path.Combine(AppContext.BaseDirectory, "Data", "transactions.json");
+
+        File.WriteAllText(path, json);
     }
 
     public User? LoginUser(string name)
