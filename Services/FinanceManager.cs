@@ -19,29 +19,47 @@ public class FinanceManager
         LoadTransactions();
     }
 
-private void LoadUsers()
-{
-    string json = File.ReadAllText("Data/users.json");
-
-    var options = new JsonSerializerOptions
+    private void LoadUsers()
     {
-        PropertyNameCaseInsensitive = true
-    };
-    options.Converters.Add(new JsonStringEnumConverter());
+        string path = Path.Combine(AppContext.BaseDirectory, "Data", "users.json");
 
-    users = JsonSerializer.Deserialize<List<User>>(json, options)!;
-}
+        if (!File.Exists(path))
+        {
+            users = new List<User>();
+            return;
+        }
 
-private void LoadCategories()
+        string json = File.ReadAllText(path);
+
+        var options = new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
+        };
+        options.Converters.Add(new JsonStringEnumConverter());
+
+        users = JsonSerializer.Deserialize<List<User>>(json, options)
+                ?? new List<User>();
+    }
+
+    private void LoadCategories()
     {
-        string json = File.ReadAllText("Data/categories.json");
+        string path = Path.Combine(AppContext.BaseDirectory, "Data", "categories.json");
+
+        if (!File.Exists(path))
+        {
+            categories = new List<Category>();
+            return;
+        }
+
+        string json = File.ReadAllText(path);
 
         var options = new JsonSerializerOptions
         {
             PropertyNameCaseInsensitive = true
         };
 
-        categories = JsonSerializer.Deserialize<List<Category>>(json, options)!;
+        categories = JsonSerializer.Deserialize<List<Category>>(json, options)
+                     ?? new List<Category>();
     }
 
     private void LoadTransactions()

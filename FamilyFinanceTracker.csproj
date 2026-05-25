@@ -9,7 +9,7 @@
 
 	<ItemGroup>
 		<None Update="Data\*.json">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 	</ItemGroup>
 
