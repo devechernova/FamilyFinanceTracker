@@ -87,16 +87,32 @@ class Program
         }
 
 
-        Console.WriteLine("Kategorie auswählen:");
+        int categoryId = 0;
 
-        var categories = manager.GetCategories();
-
-        foreach (var c in categories)
+        if (type == TransactionType.Expense)
         {
-            Console.WriteLine($"{c.Id}. {c.Name}");
+            Console.WriteLine("Kategorie auswählen:");
+
+            var categories = manager.GetCategories();
+
+            foreach (var c in categories)
+            {
+                Console.WriteLine($"{c.Id}. {c.Name}");
+            }
+
+            while (!int.TryParse(Console.ReadLine(), out categoryId) ||
+                   !categories.Any(c => c.Id == categoryId))
+            {
+                Console.Write("Ungültige Kategorie, bitte erneut wählen: ");
+            }
+        }
+        else
+        {
+            // Einkommen — ohne Kategorie
+            categoryId = 0;
+            Console.WriteLine("Einnahme wird zum Konto hinzugefügt ✅");
         }
 
-        int categoryId = Convert.ToInt32(Console.ReadLine());
 
         manager.AddTransaction(new Transaction(0, amount, type, categoryId, user.Id));
 

@@ -137,10 +137,14 @@ public class FinanceManager
 
     public string GetCategoryName(int categoryId)
     {
+        if (categoryId == 0)
+            return "Keine Kategorie";
+
         var category = categories.FirstOrDefault(c => c.Id == categoryId);
 
         return category != null ? category.Name : "Unbekannt";
     }
+
 
     public List<Category> GetCategories()
     {
