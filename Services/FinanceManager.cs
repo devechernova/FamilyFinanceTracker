@@ -44,30 +44,30 @@ private void LoadCategories()
         categories = JsonSerializer.Deserialize<List<Category>>(json, options)!;
     }
 
-private void LoadTransactions()
-{
-    if (!File.Exists("Data/transactions.json"))
+    private void LoadTransactions()
     {
-        transactions = new List<Transaction>();
-        return;
-    }
-
         string path = Path.Combine(AppContext.BaseDirectory, "Data", "transactions.json");
+
+        if (!File.Exists(path))
+    {
+            transactions = new List<Transaction>();
+            return;
+        }
 
         string json = File.ReadAllText(path);
 
-
         var options = new JsonSerializerOptions
-    {
-        PropertyNameCaseInsensitive = true
-    };
+        {
+            PropertyNameCaseInsensitive = true
+        };
 
-    transactions = JsonSerializer.Deserialize<List<Transaction>>(json, options)
-                   ?? new List<Transaction>();
-}
+        transactions = JsonSerializer.Deserialize<List<Transaction>>(json, options)
+                       ?? new List<Transaction>();
 
+        Console.WriteLine($"DEBUG: Loaded {transactions.Count} transactions ✅");
+    }
 
-private void SaveTransactions()
+    private void SaveTransactions()
     {
         Console.WriteLine("DEBUG: SaveTransactions called ");
         var options = new JsonSerializerOptions
