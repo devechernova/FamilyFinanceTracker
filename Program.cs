@@ -190,7 +190,7 @@ class Program
             decimal percent = total > 0 ? (entry.Value / total) * 100 : 0;
 
 
-            int barLength = (int)(percent / 2); // skalierbar (50% ≈ 25 Zeichen)
+            int barLength = Math.Max(1, (int)(percent * 2));/
             string bar = new string('█', barLength);
 
             Console.WriteLine($"{entry.Key,-20} {bar} {percent:F1}%");
