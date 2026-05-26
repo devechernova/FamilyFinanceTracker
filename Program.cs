@@ -178,8 +178,14 @@ class Program
         decimal total = stats.Values.Sum();
 
         Console.WriteLine("\n=== AUSGABEN NACH KATEGORIEN ===");
+        var top = stats.OrderByDescending(x => x.Value).FirstOrDefault();
 
-        foreach (var entry in stats)
+        if (top.Key != null)
+        {
+            Console.WriteLine($"\nTop Kategorie: {top.Key} ({top.Value} €) 🔥\n");
+        }
+
+        foreach (var entry in stats.OrderByDescending(e => e.Value))
         {
             decimal percent = total > 0 ? (entry.Value / total) * 100 : 0;
 
