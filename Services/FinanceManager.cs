@@ -66,38 +66,53 @@ public class FinanceManager
     {
         string path = Path.Combine(AppContext.BaseDirectory, "Data", "transactions.json");
 
-        if (!File.Exists(path))
-    {
-            transactions = new List<Transaction>();
-            return;
-        }
-
-        string json = File.ReadAllText(path);
-
-        var options = new JsonSerializerOptions
+        try
         {
-            PropertyNameCaseInsensitive = true
-        };
+            if (!File.Exists(path))
+            {
+                transactions = new List<Transaction>();
+                return;
+            }
 
-        transactions = JsonSerializer.Deserialize<List<Transaction>>(json, options)
-                       ?? new List<Transaction>();
+            string json = File.ReadAllText(path);
 
-        Console.WriteLine($"DEBUG: Loaded {transactions.Count} transactions ✅");
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+
+            transactions = JsonSerializer.Deserialize<List<Transaction>>(json, options)
+                           ?? new List<Transaction>();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Fehler beim Laden der Transaktionen!");
+            Console.WriteLine(ex.Message);
+
+            transactions = new List<Transaction>();
+        }
     }
 
     private void SaveTransactions()
     {
-        Console.WriteLine("DEBUG: SaveTransactions called ");
-        var options = new JsonSerializerOptions
+        try
         {
-            WriteIndented = true
-        };
+            var options = new JsonSerializerOptions
+            {
+                WriteIndented = true
+            };
 
-        string json = JsonSerializer.Serialize(transactions, options);
+            string json = JsonSerializer.Serialize(transactions, options);
 
-        string path = Path.Combine(AppContext.BaseDirectory, "Data", "transactions.json");
+            string path = Path.Combine(AppContext.BaseDirectory, "Data", "transactions.json");
 
-        File.WriteAllText(path, json);
+            File.WriteAllText(path, json);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Fehler beim Speichern der Transaktionen!");
+            Console.WriteLine(ex.Message);
+        }
     }
 
     public User? LoginUser(string name)
