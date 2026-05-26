@@ -184,16 +184,24 @@ class Program
         {
             Console.WriteLine($"\nTop Kategorie: {top.Key} ({top.Value} €) 🔥\n");
         }
-
+        int maxLength = stats.Keys.Max(k => k.Length);
+        int maxBarLength = stats
+    .Select(e => Math.Max(1, (int)((e.Value / total) * 100 * 2)))
+    .Max();
         foreach (var entry in stats.OrderByDescending(e => e.Value))
         {
             decimal percent = total > 0 ? (entry.Value / total) * 100 : 0;
 
 
-            int barLength = Math.Max(1, (int)(percent * 2));/
+            int barLength = Math.Max(1, (int)(percent * 2));
             string bar = new string('█', barLength);
 
-            Console.WriteLine($"{entry.Key,-20} {bar} {percent:F1}%");
+
+            Console.WriteLine(
+               $"{entry.Key.PadRight(maxLength + 2)}" +
+               $"{bar.PadRight(maxBarLength)}  " +
+               $"{percent,6:F1}%\n"
+             );
 
         }
     }
