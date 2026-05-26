@@ -177,17 +177,27 @@ class Program
 
         decimal total = stats.Values.Sum();
 
-        Console.WriteLine("\n=== AUSGABEN NACH KATEGORIEN ===");
+        Console.WriteLine("\n===============================================");
+        Console.WriteLine("      AUSGABEN NACH KATEGORIEN");
+        Console.WriteLine("===============================================");
         var top = stats.OrderByDescending(x => x.Value).FirstOrDefault();
 
         if (top.Key != null)
         {
-            Console.WriteLine($"\nTop Kategorie: {top.Key} ({top.Value} €) 🔥\n");
+
+            Console.WriteLine($"\nTop Kategorie: {top.Key} ({top.Value} €) 🔥");
+            Console.WriteLine("------------------------------------------------\n");
+
         }
         int maxLength = stats.Keys.Max(k => k.Length);
         int maxBarLength = stats
+
     .Select(e => Math.Max(1, (int)((e.Value / total) * 100 * 2)))
     .Max();
+
+        Console.WriteLine($"{"Kategorie".PadRight(maxLength + 2)}{"Verteilung".PadRight(maxBarLength + 2)} Prozent");
+        Console.WriteLine(new string('-', maxLength + maxBarLength + 15));
+
         foreach (var entry in stats.OrderByDescending(e => e.Value))
         {
             decimal percent = total > 0 ? (entry.Value / total) * 100 : 0;
