@@ -131,7 +131,13 @@ public class FinanceManager
     }
     public void AddTransaction(Transaction transaction)
     {
-        transactions.Add(transaction);
+        int newId = transactions.Any()
+            ? transactions.Max(t => t.Id) + 1
+            : 1;
+
+        transaction.Id = newId;
+
+    transactions.Add(transaction);
         SaveTransactions();
     }
 
