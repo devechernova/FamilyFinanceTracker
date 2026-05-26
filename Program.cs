@@ -189,7 +189,12 @@ class Program
         {
             decimal percent = total > 0 ? (entry.Value / total) * 100 : 0;
 
-            Console.WriteLine($"{entry.Key}: {entry.Value} € ({percent:F1}%)");
+
+            int barLength = (int)(percent / 2); // skalierbar (50% ≈ 25 Zeichen)
+            string bar = new string('█', barLength);
+
+            Console.WriteLine($"{entry.Key,-20} {bar} {percent:F1}%");
+
         }
     }
 }
