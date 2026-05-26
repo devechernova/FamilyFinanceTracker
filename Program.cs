@@ -175,11 +175,15 @@ class Program
     {
         var stats = manager.GetExpensesByCategory();
 
+        decimal total = stats.Values.Sum();
+
         Console.WriteLine("\n=== AUSGABEN NACH KATEGORIEN ===");
 
         foreach (var entry in stats)
         {
-            Console.WriteLine($"{entry.Key}: {entry.Value} €");
+            decimal percent = total > 0 ? (entry.Value / total) * 100 : 0;
+
+            Console.WriteLine($"{entry.Key}: {entry.Value} € ({percent:F1}%)");
         }
     }
 }
