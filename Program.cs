@@ -1,4 +1,5 @@
-﻿using FamilyFinanceTracker.Models;
+﻿using Spectre.Console;
+using FamilyFinanceTracker.Models;
 using FamilyFinanceTracker.Services;
 using System.Text;
 using System.Linq;
@@ -31,52 +32,58 @@ class Program
 
         while (running)
         {
-            Console.WriteLine("\n=== MENÜ ===");
+            string choice;
 
             if (user.Role == Role.Parent)
             {
-                Console.WriteLine("1. Einnahme hinzufügen");
-                Console.WriteLine("2. Ausgabe hinzufügen");
-                Console.WriteLine("3. Kontostand anzeigen");
-                Console.WriteLine("4. Transaktionen anzeigen");
-                Console.WriteLine("5. Statistik anzeigen");
-                Console.WriteLine("6. Beenden");
+                choice = AnsiConsole.Prompt(
+                    new SelectionPrompt<string>()
+                        .Title("[green]Menü auswählen:[/]")
+                        .PageSize(10)
+                        .AddChoices(new[]
+                        {
+                    "Einnahme hinzufügen",
+                    "Ausgabe hinzufügen",
+                    "Kontostand anzeigen",
+                    "Transaktionen anzeigen",
+                    "Statistik anzeigen",
+                    "Beenden"
+                        }));
             }
             else
             {
-                Console.WriteLine("1. Ausgabe hinzufügen");
-                Console.WriteLine("2. Meine Ausgaben anzeigen");
-                Console.WriteLine("3. Beenden");
+                AnsiConsole.MarkupLine("[yellow]1.[/] Ausgabe hinzufügen");
+                AnsiConsole.MarkupLine("[yellow]2.[/] Meine Ausgaben anzeigen");
+                AnsiConsole.MarkupLine("[yellow]3.[/] Beenden");
+
+                choice = Console.ReadLine()!;
             }
-
-
-            string choice = Console.ReadLine()!;
 
             if (user.Role == Role.Parent)
             {
                 switch (choice)
                 {
-                    case "1":
+                    case "Einnahme hinzufügen":
                         AddTransaction(manager, user, TransactionType.Income);
                         break;
 
-                    case "2":
+                    case "Ausgabe hinzufügen":
                         AddTransaction(manager, user, TransactionType.Expense);
                         break;
 
-                    case "3":
-                        Console.WriteLine($"Aktueller Kontostand: {manager.GetBalance()} €");
+                    case "Kontostand anzeigen":
+                        AnsiConsole.MarkupLine($"[yellow]Kontostand: {manager.GetBalance()} €[/]");
                         break;
 
-                    case "4":
+                    case "Transaktionen anzeigen":
                         ShowTransactions(manager);
                         break;
 
-                    case "5":
+                    case "Statistik anzeigen":
                         ShowStatistics(manager);
                         break;
 
-                    case "6":
+                    case "Beenden":
                         running = false;
                         break;
                 }
