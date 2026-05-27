@@ -231,11 +231,9 @@ class Program
         AnsiConsole.Write(new Rule("[yellow]Ausgaben nach Kategorien[/]").RuleStyle("grey"));
 
         var top = stats.OrderByDescending(x => x.Value).First();
-
         AnsiConsole.MarkupLine($"\n[bold]Top Kategorie:[/] [green]{top.Key} ({top.Value} €)[/]\n");
 
         var table = new Table();
-
         table.AddColumn("[yellow]Kategorie[/]");
         table.AddColumn("[yellow]Betrag[/]");
         table.AddColumn("[yellow]Anteil[/]");
@@ -244,19 +242,34 @@ class Program
         {
             decimal percent = total > 0 ? (entry.Value / total) * 100 : 0;
 
-            var bar = new BarChart()
-                .Width(20)
-                .Label("")
-                .AddItem("", (double)percent, Color.Cyan);
-
             table.AddRow(
                 entry.Key,
                 $"{entry.Value,8} €",
                 $"{percent,5:F1} %"
             );
         }
+
         AnsiConsole.Write(table);
+        
         AnsiConsole.WriteLine();
-    }
+
+        foreach (var entry in stats.OrderByDescending(e => e.Value))
+        {
+            decimal percent = total > 0 ? (entry.Value / total) * 100 : 0;
+
+            int barLength = Math.Max(1, (int)(percent / 2)); 
+
+            string bar = new string('█', barLength);
+
+            string line =
+                $"{entry.Key.PadRight(25)} " +
+                $"{percent,5:F1} %  " +
+                bar;
+
+            AnsiConsole.MarkupLine($"[green]{line}[/]");
+
+            AnsiConsole.WriteLine(); 
+        }
+}
 }
 
