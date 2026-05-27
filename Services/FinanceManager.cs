@@ -36,8 +36,6 @@ public class FinanceManager
     {
         string path = GetDataPath("users.json");
 
-        Console.WriteLine($"DEBUG USERS PATH: {path}");
-
         if (!File.Exists(path))
         {
             Console.WriteLine("DEBUG: users.json NOT FOUND ❌");
@@ -56,7 +54,6 @@ public class FinanceManager
         users = JsonSerializer.Deserialize<List<User>>(json, options)
                 ?? new List<User>();
 
-        Console.WriteLine($"DEBUG users count: {users.Count} ✅");
     }
 
     // ✅ CATEGORIES
@@ -138,8 +135,6 @@ public class FinanceManager
     // ✅ LOGIN
     public User? LoginUser(string name)
     {
-        Console.WriteLine($"DEBUG users count: {users.Count}");
-
         string input = name.Trim();
 
         foreach (var user in users)
