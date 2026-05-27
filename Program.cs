@@ -77,7 +77,7 @@ class Program
                         break;
 
                     case "Kontostand anzeigen":
-                        AnsiConsole.MarkupLine($"[yellow]Kontostand: {manager.GetBalance()} €[/]");
+                        AnsiConsole.MarkupLine($"[bold yellow]Kontostand: {manager.GetBalance()} €[/]");
                         break;
 
                     case "Transaktionen anzeigen":
@@ -165,7 +165,11 @@ class Program
     {
         var transactions = manager.GetAllTransactions();
 
-        AnsiConsole.MarkupLine("\n[bold underline]Transaktionen:[/]\n");
+        AnsiConsole.Write(
+    new Rule("[bold yellow]Transaktionen[/]")
+        .RuleStyle("grey")
+);
+        AnsiConsole.WriteLine();
         
         var table = new Table();
 
@@ -180,7 +184,7 @@ class Program
 
             table.AddRow(
                 typeText,
-                $"{t.Amount} €",
+                $"{t.Amount,8} €",
                 category
             );
         }
@@ -192,7 +196,11 @@ class Program
         var transactions = manager.GetAllTransactions()
                                   .Where(t => t.UserId == user.Id);
 
-        AnsiConsole.MarkupLine("\n[bold underline]Meine Ausgaben:[/]\n");
+        AnsiConsole.Write(
+    new Rule("[bold yellow]Meine Ausgaben[/]")
+        .RuleStyle("grey")
+);
+        AnsiConsole.WriteLine();
 
         var table = new Table();
 
@@ -202,7 +210,7 @@ class Program
         foreach (var t in transactions)
         {
             table.AddRow(
-                $"{t.Amount} €",
+                $"{t.Amount,8} €",
                 manager.GetCategoryName(t.CategoryId)
             );
         }
@@ -212,46 +220,43 @@ class Program
     static void ShowStatistics(FinanceManager manager)
     {
         var stats = manager.GetExpensesByCategory();
-
         decimal total = stats.Values.Sum();
 
-        Console.WriteLine("\n===============================================");
-        Console.WriteLine("      AUSGABEN NACH KATEGORIEN");
-        Console.WriteLine("===============================================");
-        var top = stats.OrderByDescending(x => x.Value).FirstOrDefault();
-
-        if (top.Key != null)
+        if (!stats.Any())
         {
-
-            Console.WriteLine($"\nTop Kategorie: {top.Key} ({top.Value} €) 🔥");
-            Console.WriteLine("------------------------------------------------\n");
-
+            AnsiConsole.MarkupLine("[red]Keine Daten vorhanden.[/]");
+            return;
         }
-        int maxLength = stats.Keys.Max(k => k.Length);
-        int maxBarLength = stats
 
-    .Select(e => Math.Max(1, (int)((e.Value / total) * 100 * 2)))
-    .Max();
+        AnsiConsole.Write(new Rule("[yellow]Ausgaben nach Kategorien[/]").RuleStyle("grey"));
 
-        Console.WriteLine($"{"Kategorie".PadRight(maxLength + 2)}{"Verteilung".PadRight(maxBarLength + 2)} Prozent");
-        Console.WriteLine(new string('-', maxLength + maxBarLength + 15));
+        var top = stats.OrderByDescending(x => x.Value).First();
+
+        AnsiConsole.MarkupLine($"\n[bold]Top Kategorie:[/] [green]{top.Key} ({top.Value} €)[/]\n");
+
+        var table = new Table();
+
+        table.AddColumn("[yellow]Kategorie[/]");
+        table.AddColumn("[yellow]Betrag[/]");
+        table.AddColumn("[yellow]Anteil[/]");
 
         foreach (var entry in stats.OrderByDescending(e => e.Value))
         {
             decimal percent = total > 0 ? (entry.Value / total) * 100 : 0;
 
+            var bar = new BarChart()
+                .Width(20)
+                .Label("")
+                .AddItem("", (double)percent, Color.Cyan);
 
-            int barLength = Math.Max(1, (int)(percent * 2));
-            string bar = new string('█', barLength);
-
-
-            Console.WriteLine(
-               $"{entry.Key.PadRight(maxLength + 2)}" +
-               $"{bar.PadRight(maxBarLength)}  " +
-               $"{percent,6:F1}%\n"
-             );
-
+            table.AddRow(
+                entry.Key,
+                $"{entry.Value,8} €",
+                $"{percent,5:F1} %"
+            );
         }
+        AnsiConsole.Write(table);
+        AnsiConsole.WriteLine();
     }
 }
 
