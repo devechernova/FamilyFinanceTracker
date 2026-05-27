@@ -160,27 +160,49 @@ class Program
     {
         var transactions = manager.GetAllTransactions();
 
-        Console.WriteLine("\n=== TRANSAKTIONEN ===");
+        AnsiConsole.MarkupLine("\n[bold underline]Transaktionen:[/]\n");
+        
+        var table = new Table();
+
+        table.AddColumn("[yellow]Typ[/]");
+        table.AddColumn("[yellow]Betrag[/]");
+        table.AddColumn("[yellow]Kategorie[/]");
 
         foreach (var t in transactions)
         {
             string typeText = t.Type == TransactionType.Income ? "Einnahme" : "Ausgabe";
+            string category = manager.GetCategoryName(t.CategoryId);
 
-            Console.WriteLine($"{typeText}: {t.Amount} € | Kategorie: {manager.GetCategoryName(t.CategoryId)}");
-
+            table.AddRow(
+                typeText,
+                $"{t.Amount} €",
+                category
+            );
         }
+
+        AnsiConsole.Write(table);
     }
     static void ShowTransactionsForUser(FinanceManager manager, User user)
     {
         var transactions = manager.GetAllTransactions()
                                   .Where(t => t.UserId == user.Id);
 
-        Console.WriteLine("\n=== MEINE AUSGABEN ===");
+        AnsiConsole.MarkupLine("\n[bold underline]Meine Ausgaben:[/]\n");
+
+        var table = new Table();
+
+        table.AddColumn("[yellow]Betrag[/]");
+        table.AddColumn("[yellow]Kategorie[/]");
 
         foreach (var t in transactions)
         {
-            Console.WriteLine($"Ausgabe: {t.Amount} € | Kategorie: {manager.GetCategoryName(t.CategoryId)}");
+            table.AddRow(
+                $"{t.Amount} €",
+                manager.GetCategoryName(t.CategoryId)
+            );
         }
+
+        AnsiConsole.Write(table);
     }
     static void ShowStatistics(FinanceManager manager)
     {
