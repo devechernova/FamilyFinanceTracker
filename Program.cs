@@ -10,18 +10,22 @@ class Program
         Console.OutputEncoding = Encoding.UTF8;
         FinanceManager manager = new FinanceManager();
 
-        Console.Write("Benutzername eingeben: ");
-        string name = Console.ReadLine()!;
+        User? user = null;
 
-        var user = manager.LoginUser(name);
-
-        if (user == null)
+        while (user == null)
         {
-            Console.WriteLine("Benutzer wurde nicht gefunden!");
-            return;
+            Console.Write("Benutzername eingeben: ");
+            string name = Console.ReadLine();
+
+            user = manager.LoginUser(name);
+
+            if (user == null)
+            {
+                Console.WriteLine("Benutzer wurde nicht gefunden, bitte erneut eingeben! ❌");
+            }
         }
 
-        Console.WriteLine($"Willkommen, {user.Name}!");
+                Console.WriteLine($"Willkommen, {user.Name}!");
 
         bool running = true;
 

@@ -1,8 +1,9 @@
-﻿using System.Text.Json;
-using System.Text.Json.Serialization;
-using System.Linq;
+﻿using FamilyFinanceTracker.Models;
+using System;
 using System.IO;
-using FamilyFinanceTracker.Models;
+using System.Linq;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace FamilyFinanceTracker.Services;
 
@@ -19,12 +20,27 @@ public class FinanceManager
         LoadTransactions();
     }
 
+    // ✅EIN EINHEITLICHES VERFAHREN FÜR WEGE
+    private string GetDataPath(string fileName)
+    {
+        return Path.GetFullPath(Path.Combine(
+            AppDomain.CurrentDomain.BaseDirectory,
+            "..", "..", "..",
+            "Data",
+            fileName
+        ));
+    }
+
+    // ✅ USERS
     private void LoadUsers()
     {
-        string path = Path.Combine(AppContext.BaseDirectory, "Data", "users.json");
+        string path = GetDataPath("users.json");
+
+        Console.WriteLine($"DEBUG USERS PATH: {path}");
 
         if (!File.Exists(path))
         {
+            Console.WriteLine("DEBUG: users.json NOT FOUND ❌");
             users = new List<User>();
             return;
         }
@@ -39,11 +55,14 @@ public class FinanceManager
 
         users = JsonSerializer.Deserialize<List<User>>(json, options)
                 ?? new List<User>();
+
+        Console.WriteLine($"DEBUG users count: {users.Count} ✅");
     }
 
+    // ✅ CATEGORIES
     private void LoadCategories()
     {
-        string path = Path.Combine(AppContext.BaseDirectory, "Data", "categories.json");
+        string path = GetDataPath("categories.json");
 
         if (!File.Exists(path))
         {
@@ -62,9 +81,10 @@ public class FinanceManager
                      ?? new List<Category>();
     }
 
+    // ✅ TRANSACTIONS
     private void LoadTransactions()
     {
-        string path = Path.Combine(AppContext.BaseDirectory, "Data", "transactions.json");
+        string path = GetDataPath("transactions.json");
 
         try
         {
@@ -104,7 +124,7 @@ public class FinanceManager
 
             string json = JsonSerializer.Serialize(transactions, options);
 
-            string path = Path.Combine(AppContext.BaseDirectory, "Data", "transactions.json");
+            string path = GetDataPath("transactions.json");
 
             File.WriteAllText(path, json);
         }
@@ -115,8 +135,11 @@ public class FinanceManager
         }
     }
 
+    // ✅ LOGIN
     public User? LoginUser(string name)
     {
+        Console.WriteLine($"DEBUG users count: {users.Count}");
+
         string input = name.Trim();
 
         foreach (var user in users)
@@ -129,6 +152,8 @@ public class FinanceManager
 
         return null;
     }
+
+    // ✅ ADD
     public void AddTransaction(Transaction transaction)
     {
         int newId = transactions.Any()
@@ -137,7 +162,7 @@ public class FinanceManager
 
         transaction.Id = newId;
 
-    transactions.Add(transaction);
+        transactions.Add(transaction);
         SaveTransactions();
     }
 
@@ -166,7 +191,6 @@ public class FinanceManager
         return category != null ? category.Name : "Unbekannt";
     }
 
-
     public List<Category> GetCategories()
     {
         return categories;
@@ -176,11 +200,11 @@ public class FinanceManager
     {
         return transactions;
     }
+
     public Dictionary<string, decimal> GetExpensesByCategory()
     {
         var result = new Dictionary<string, decimal>();
 
-        // nur Ausgaben
         var expenses = transactions.Where(t => t.Type == TransactionType.Expense);
 
         foreach (var t in expenses)
@@ -198,4 +222,3 @@ public class FinanceManager
         return result;
     }
 }
-
