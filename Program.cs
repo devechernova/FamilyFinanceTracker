@@ -52,11 +52,16 @@ class Program
             }
             else
             {
-                AnsiConsole.MarkupLine("[yellow]1.[/] Ausgabe hinzufügen");
-                AnsiConsole.MarkupLine("[yellow]2.[/] Meine Ausgaben anzeigen");
-                AnsiConsole.MarkupLine("[yellow]3.[/] Beenden");
-
-                choice = Console.ReadLine()!;
+                choice = AnsiConsole.Prompt(
+     new SelectionPrompt<string>()
+         .Title("[green]Menü auswählen:[/]")
+         .PageSize(10)
+         .AddChoices(new[]
+         {
+            "Ausgabe hinzufügen",
+            "Meine Ausgaben anzeigen",
+            "Beenden"
+         }));
             }
 
             if (user.Role == Role.Parent)
@@ -92,15 +97,15 @@ class Program
             {
                 switch (choice)
                 {
-                    case "1":
+                    case "Ausgabe hinzufügen":
                         AddTransaction(manager, user, TransactionType.Expense);
                         break;
 
-                    case "2":
+                    case "Meine Ausgaben anzeigen":
                         ShowTransactionsForUser(manager, user);
                         break;
 
-                    case "3":
+                    case "Beenden":
                         running = false;
                         break;
                 }
